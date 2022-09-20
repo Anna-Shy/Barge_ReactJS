@@ -4,24 +4,21 @@ import App from "./App";
 const loadGrain = (levels) => {
   let count = 0;
 
-  if (levels.length >= 3) {
-    for (let i = 0; i < levels.length; i++) {
-      if (levels[i] === 0) {
-        count += levels[i - 1];
-      }
+  for (let i = 0; i < levels.length - 1; i++) {
+    if (i === 0) {
+      continue;
+    } else {
+      let firstMax = Math.max(...levels.slice(0, i));
+      let secondMax = Math.max(...levels.slice(i));
 
-      if (levels[i] > levels[i + 1] && levels[i + 1] < levels[i + 2]) {
-        if (levels[i + 2] < levels[i]) {
-          count += levels[i + 2] - levels[i + 1];
-        } else {
-          count += levels[i] - levels[i + 1];
-        }
+      let num = Math.min(firstMax, secondMax) - levels[i];
+
+      if (num > 0) {
+        count += num;
       }
     }
-    return count;
   }
-
-  return 0;
+  return count;
 };
 
 describe("check the solution of the loadGrain function", () => {
@@ -50,5 +47,16 @@ describe("check the solution of the loadGrain function", () => {
   });
   it("[3, 2, 3, 2, 3] should be 2", () => {
     expect(loadGrain([3, 2, 3, 2, 3])).toBe(2);
+  });
+  it("[15, 0, 6, 10, 11, 2, 5] should be 20", () => {
+    expect(loadGrain([15, 0, 6, 10, 11, 2, 5])).toBe(20);
+  });
+  it("[28, 37, 36, 48, 32, 3, 6, 14, 45, 37, 33, 24, 2, 0, 26, 5, 8, 14, 39, 9, 18, 48, 41, 12, 43, 31, 17, 37, 38] should be 564", () => {
+    expect(
+      loadGrain([
+        28, 37, 36, 48, 32, 3, 6, 14, 45, 37, 33, 24, 2, 0, 26, 5, 8, 14, 39, 9,
+        18, 48, 41, 12, 43, 31, 17, 37, 38
+      ])
+    ).toBe(564);
   });
 });
